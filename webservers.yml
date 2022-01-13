@@ -1,0 +1,31 @@
+---
+- name: install Apache
+  hosts: aws_ec2
+  vars:
+    ansible_ssh_private_key_file: "~/.ssh/awskey.pem"
+  tasks:
+    - name: install the latest version of Apache
+      yum:
+        name: 
+          - httpd
+          - php
+        state: present
+        update_cache: true
+      become: true
+      
+    - name: "copy code from GitHub"
+      get_url:
+       url: https://raw.githubusercontent.com/Shashikant17/ansible_task_for_httpdserver/main/index.php
+       dest: "/var/www/html/index.php"
+      become: true
+
+    - name: Start service httpd, if not running
+      service:
+        name: httpd
+        state: started
+      become: true
+
+
+  handlers:
+    - name: restart httpd
+      service: name=httpd state=reloaded
