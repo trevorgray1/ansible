@@ -12,12 +12,28 @@
         state: present
         update_cache: true
       become: true
-      
-    - name: "copy code from GitHub"
-      get_url:
-       url: https://raw.githubusercontent.com/Shashikant17/ansible_task_for_httpdserver/main/index.php
-       dest: "/var/www/html/index.php"
+    
+    - name: "Create document root"
+      file: 
+        path: "/var/www/html"
+        state: directory
       become: true
+    - name: "Copy Index.html"
+      copy: 
+        src: "/home/ec2-user/ansible/configs/index.html"
+        dest: "/var/www/html"
+      notify: "Restart HTTPD"
+      become: true
+
+      
+
+
+
+#    - name: "copy code from GitHub"
+#      get_url:
+#       url: https://raw.githubusercontent.com/Shashikant17/ansible_task_for_httpdserver/main/index.php
+#       dest: "/var/www/html/index.php"
+#      become: true
 
     - name: Start service httpd, if not running
       service:
