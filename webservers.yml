@@ -22,7 +22,7 @@
       copy: 
         src: "/home/ec2-user/ansible/configs/index.html"
         dest: "/var/www/html"
-      notify: "Restart HTTPD"
+      notify: restart httpd
       become: true
 
       
